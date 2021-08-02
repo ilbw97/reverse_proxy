@@ -15,6 +15,8 @@ type information struct {
 	Port   int    `json:"port"`
 }
 
+type informations = []information
+
 var info *information
 
 func s_info_Handler(w http.ResponseWriter, r *http.Request) {
@@ -34,6 +36,7 @@ func s_info_Handler(w http.ResponseWriter, r *http.Request) {
 		defer jsonfile.Close()
 
 		jsonfile.Write(get_info)
+
 		jsonfile.Close()
 		fmt.Println("JSON DATA WRRITEN TO \n", jsonfile.Name())
 
@@ -54,6 +57,7 @@ func s_info_Handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/new_info", s_info_Handler)
-	http.ListenAndServe(":301", nil)
+	mux := http.NewServeMux()
+	mux.HandleFunc("/new_info", s_info_Handler)
+	http.ListenAndServe(":301", mux)
 }
